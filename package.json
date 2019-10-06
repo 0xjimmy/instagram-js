@@ -1,0 +1,16 @@
+{
+  "name": "instagram-js",
+  "version": "1.0.0",
+  "description": "Instagram Automation Libarary implemented with NodeJS and Puppeteer",
+  "main": "instagram.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Instagram",
+    "Automation",
+    "Js"
+  ],
+  "author": "James Galbraith",
+  "license": "ISC"
+}
