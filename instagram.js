@@ -1,9 +1,6 @@
 // Puppeteer dependecy for assesing Instagram
 const Puppeteer = require('puppeteer')
 
-// Config File for account credentials for testing
-const config = require('./config.json')
-
 // Browser and Page Object
 let browser
 let page
@@ -128,7 +125,6 @@ function unfollow(username) {
 // Comment
 // @param URL of post to comment on, string
 // @param Message content of the post, string
-// @dev Creates a comment on a post
 function comment(post, message) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -156,6 +152,7 @@ function comment(post, message) {
 }
 
 // Like Post
+// @param Post - URL of the post, string
 function likePost(post) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -177,6 +174,7 @@ function likePost(post) {
 }
 
 // Unlike Post
+// @param Post - URL of the post, string
 function unlikePost(post) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -197,11 +195,28 @@ function unlikePost(post) {
     })
 }
 
+// Create A Post
+// @param
+function post() {
+    // Image / Video -- add possibly multiple
+    // Filter
+    
+}
+
 /* TODO */
 // - Post
 // - Create Story
 // - Send DM
 // - Block
 // - Accept private follow request
+
+(async () => {
+    // Config File for account credentials for testing
+    const config = require('./config.json')
+
+    await init(true)
+    await login(config.username, config.password)
+    
+})()
 
 module.exports = { init, close, login, followerCount, follow, unfollow, comment, likePost, unlikePost }
