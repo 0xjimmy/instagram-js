@@ -21,13 +21,13 @@ Import the libary and create a new client object.
 * [client.unfollow](#clientunfollowusername)
 * [client.comment](#clientcommentpost-message)
 * [client.likePost](#clientlikepostpost)
-* [cleint.unlikePost](#clientunlikepostpost)
+* [client.unlikePost](#clientunlikepostpost)
+* [client.post](#clientunlikepostpost)
 
 
 ### client.init([dev])
 Creates a Chromium instance to emulate Instagram on mobile.
 * ``dev`` <[bool]()> (Optional) If **true** is given the Chromium browser will be visable and not run in the hidden in the background
-
 
 ### client.login(username, password)
 Logs into your Instagram account, this is required to perform actions that being signed in necessary.
@@ -69,4 +69,10 @@ Likes a specified Instagram post.
 ### client.unlikePost(post)
 UnLikes a specified Instagram post.
 * ``post`` <[string]()> URL of the Instagram post to unlike
+* Returns <[Promise]()>
+
+### client.post(content[, comment])
+Creates a post.
+* ``content`` <[string]()> Dir of the image or video to upload
+* ``comment`` <[string]()> Optional - Comment to of the post
 * Returns <[Promise]()>

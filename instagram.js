@@ -15,6 +15,7 @@ class Client {
                 this.browser = await Puppeteer.launch(options)
                 this.page = await this.browser.newPage()
                 await this.page.emulate(Puppeteer.devices['iPhone 6'])
+                await this.page.bringToFront()
                 resolve()
             }
             catch (e) {
@@ -41,18 +42,20 @@ class Client {
     login(username, password) {
         return new Promise(async (resolve, reject) => {
             try {
+                await this.page.bringToFront()
                 await this.page.goto('https://instagram.com', {waitUntil: 'networkidle0'})
                 await this.page.click('#react-root > section > main > article > div > div > div > div:nth-child(2) > button')
                 await this.page.waitFor('#react-root > section > main > article > div > div > div > form > div:nth-child(4) > div > label > input')
                 await this.page.waitFor('#react-root > section > main > article > div > div > div > form > div:nth-child(7) > button')
                 await this.page.waitFor('#react-root > section > main > article > div > div > div > form > div:nth-child(5) > div > label > input')
                 await this.page.tap('#react-root > section > main > article > div > div > div > form > div:nth-child(4) > div > label > input')
+                await this.page.waitFor(1000)
                 await this.page.type('#react-root > section > main > article > div > div > div > form > div:nth-child(4) > div > label > input', username, {delay: 50})
                 await this.page.tap('#react-root > section > main > article > div > div > div > form > div:nth-child(5) > div > label > input')
                 await this.page.type('#react-root > section > main > article > div > div > div > form > div:nth-child(5) > div > label > input', password, {delay: 50})
                 await Promise.all([
                     this.page.waitForNavigation(),
-                    this.page.tap('#react-root > section > main > article > div > div > div > form > div:nth-child(7) > button')
+                    this.page.tap('#react-root > section > main > article > div > div > div > form > div:nth-child(7) > button'),
                 ])
                 resolve()
             }
@@ -185,6 +188,39 @@ class Client {
                     await this.page.waitFor('#react-root > section > main > div > div > article > div.eo2As > section.ltpMr.Slqrh > span.FY9nT.fr66n > button > span')
                     resolve()
                 }
+            }
+            catch (e) {
+                reject(e)
+            }
+        })
+    }
+    // Post
+    // @param Content - Dir of the media to upload, string (path)
+    // @param Comment - Caption of the post, string
+    post(content, comment) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await this.page.goto('https://www.instagram.com/', {waitUntil: "networkidle0"})
+                await this.page.waitFor(1000)
+                await this.page.waitFor('#react-root > section > nav.NXc7H.f11OC > div > div > div.KGiwt > div > div > div.q02Nz._0TPg')
+                const [fileChooser] = await Promise.all([
+                    this.page.waitForFileChooser(),
+                    this.page.tap('#react-root > section > nav.NXc7H.f11OC > div > div > div.KGiwt > div > div > div.q02Nz._0TPg'),
+                ])
+                await fileChooser.accept([content])
+                await this.page.waitFor('#react-root > section > div.gH2iS > div.N7f6u.Bc-AD > div > div > div > button.pHnkA')
+                await this.page.tap('#react-root > section > div.gH2iS > div.N7f6u.Bc-AD > div > div > div > button.pHnkA')
+                await this.page.waitFor('#react-root > section > div.Scmby > header > div > div.mXkkY.KDuQp > button')
+                await this.page.tap('#react-root > section > div.Scmby > header > div > div.mXkkY.KDuQp > button')
+                if (comment) {
+                    await this.page.waitFor('#react-root > section > div.A9bvI > section.IpSxo > div.NfvXc > textarea')
+                    await this.page.tap('#react-root > section > div.A9bvI > section.IpSxo > div.NfvXc > textarea')
+                    await this.page.type('#react-root > section > div.A9bvI > section.IpSxo > div.NfvXc > textarea', comment, { delay: 50 })
+                    await this.page.waitFor(5000)
+                }
+                await this.page.waitFor('#react-root > section > div.Scmby > header > div > div.mXkkY.KDuQp > button')
+                await this.page.tap('#react-root > section > div.Scmby > header > div > div.mXkkY.KDuQp > button')
+                resolve()
             }
             catch (e) {
                 reject(e)
